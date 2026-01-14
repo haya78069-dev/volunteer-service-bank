@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Service Bank</title>
+    <style>
+        /* Simple, clean design with humanitarian focus */
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; color: #333; line-height: 1.6; }
+        header { background-color: #007bff; color: white; padding: 1rem; text-align: center; }
+        nav { background-color: #0056b3; padding: 0.5rem; }
+        nav ul { list-style: none; padding: 0; margin: 0; display: flex; justify-content: center; }
+        nav li { margin: 0 1rem; }
+        nav a { color: white; text-decoration: none; font-weight: bold; }
+        nav a:hover { text-decoration: underline; }
+        main { max-width: 1200px; margin: 2rem auto; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        section { margin-bottom: 2rem; }
+        h1, h2, h3 { color: #007bff; }
+        .field-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        .field-card { border: 1px solid #ddd; padding: 1rem; text-align: center; border-radius: 8px; background: #f9f9f9; }
+        .field-card:hover { background: #e9ecef; }
+        form { display: flex; flex-direction: column; gap: 1rem; }
+        input, select, textarea, button { padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #007bff; color: white; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        .volunteer-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+        .volunteer-card { border: 1px solid #ddd; padding: 1rem; border-radius: 8px; background: #f9f9f9; }
+        .chat { border: 1px solid #ddd; padding: 1rem; height: 300px; overflow-y: auto; background: #f9f9f9; }
+        .message { margin-bottom: 0.5rem; }
+        .user-message { text-align: right; color: #007bff; }
+        .volunteer-message { text-align: left; color: #333; }
+        footer { text-align: center; padding: 1rem; background-color: #007bff; color: white; margin-top: 2rem; }
+        .hidden { display: none; }
+        /* Accessibility: High contrast and focus styles */
+        button:focus, input:focus, select:focus, textarea:focus { outline: 2px solid #007bff; }
+        /* Responsive */
+        @media (max-width: 768px) { nav ul { flex-direction: column; } .field-grid, .volunteer-list { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Volunteer Service Bank</h1>
+        <p>Connecting You with Compassionate Support – Secure, Private, and Impactful</p>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#volunteers">Volunteers</a></li>
+            <li><a href="#request">Submit Request</a></li>
+            <li><a href="#messages">Messages</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section id="home">
+            <h2>Welcome to Our Humanitarian Platform</h2>
+            <p>Our mission is to provide accessible, trustworthy support in times of need. Select a field below to get started, or learn more about our project.</p>
+            <div class="field-grid">
+                <div class="field-card" onclick="selectField('Health')">
+                    <h3>Health</h3>
+                    <p>Medical advice and wellness support from qualified professionals.</p>
+                </div>
+                <div class="field-card" onclick="selectField('Nutrition')">
+                    <h3>Nutrition</h3>
+                    <p>Dietary guidance and nutritional counseling.</p>
+                </div>
+                <div class="field-card" onclick="selectField('Psychology')">
+                    <h3>Psychology</h3>
+                    <p>Mental health support and counseling.</p>
+                </div>
+                <div class="field-card" onclick="selectField('Religion')">
+                    <h3>Religion</h3>
+                    <p>Spiritual guidance and community support.</p>
+                </div>
+                <div class="field-card" onclick="selectField('Social Support')">
+                    <h3>Social Support</h3>
+                    <p>Emotional and social assistance for daily challenges.</p>
+                </div>
+            </div>
+        </section>
+        <section id="about" class="hidden">
+            <h2>About the Project</h2>
+            <p>The Volunteer Service Bank is a secure platform dedicated to humanitarian impact. We connect individuals in need with qualified volunteers in Health, Nutrition, Psychology, Religion, and Social Support. All interactions are private—no personal contact details are shared. Our focus is on trust, accessibility, and making a positive difference in communities worldwide.</p>
+            <p><strong>Why Trust Us?</strong> Volunteers are vetted, communications are encrypted, and your privacy is our priority. Join thousands who have found support here.</p>
+            <blockquote>"This platform changed my life—compassionate help when I needed it most." – Anonymous User</blockquote>
+        </section>
+        <section id="volunteers" class="hidden">
+            <h2>Volunteer Profiles</h2>
+            <p>Meet our dedicated volunteers. Each has a specialization and availability schedule.</p>
+            <div class="volunteer-list" id="volunteer-list">
+                <!-- Volunteers populated by JS -->
+            </div>
+        </section>
+        <section id="request" class="hidden">
+            <h2>Submit a Request</h2>
+            <form id="request-form">
+                <label for="field-select">Select Field:</label>
+                <select id="field-select" required>
+                    <option value="">Choose...</option>
+                    <option value="Health">Health</option>
+                    <option value="Nutrition">Nutrition</option>
+                    <option value="Psychology">Psychology</option>
+                    <option value="Religion">Religion</option>
+                    <option value="Social Support">Social Support</option>
+                </select>
+                <label for="description">Describe Your Need:</label>
+                <textarea id="description" rows="4" required placeholder="Please provide details..."></textarea>
+                <button type="submit">Submit Request</button>
+            </form>
+            <div id="confirmation" class="hidden">
+                <h3>Request Submitted</h3>
+                <p id="match-info"></p>
+                <button id="confirm-btn">Confirm Match</button>
+                <button id="change-btn">Request Change</button>
+            </div>
+        </section>
+        <section id="messages" class="hidden">
+            <h2>Secure Messaging</h2>
+            <p>Communicate privately with your matched volunteer.</p>
+            <div class="chat" id="chat"></div>
+            <form id="message-form">
+                <input type="text" id="message-input" placeholder="Type your message..." required>
+                <button type="submit">Send</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Volunteer Service Bank. Built for Humanitarian Impact. <a href="#about">Privacy Policy</a></p>
+    </footer>
+    <script>
+        // Hardcoded volunteer data (in production, fetch from backend)
+        const volunteers = {
+            Health: [
+                { name: "Dr. Emily Carter", desc: "Specializes in general medicine. Available Mon-Fri.", avail: ["Mon", "Tue", "Wed", "Thu", "Fri"] },
+                { name: "Nurse Alex Rivera", desc: "Focuses on wellness and prevention. Available Tue-Sat.", avail: ["Tue", "Wed", "Thu", "Fri", "Sat"] }
+            ],
+            Nutrition: [
+                { name: "Dietitian Sarah Lee", desc: "Expert in balanced diets. Available Mon-Wed.", avail: ["Mon", "Tue", "Wed"] }
+            ],
+            Psychology: [
+                { name: "Therapist Jordan Blake", desc: "Mental health counseling. Available Thu-Sun.", avail: ["Thu", "Fri", "Sat", "Sun"] }
+            ],
+            Religion: [
+                { name: "Pastor Maria Gonzalez", desc: "Spiritual guidance. Available weekends.", avail: ["Sat", "Sun"] }
+            ],
+            "Social Support": [
+                { name: "Counselor Liam Patel", desc: "Emotional support specialist. Available daily.", avail: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] }
+            ]
+        };
+
+        let currentMatch = null;
+        let messages = JSON.parse(localStorage.getItem('messages')) || [];
+
+        // Navigation
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
+                document.getElementById(link.getAttribute('href').slice(1)).classList.remove('hidden');
+            });
+        });
+
+        // Populate volunteers
+        function loadVolunteers() {
+            const list = document.getElementById('volunteer-list');
+            list.innerHTML = '';
+            Object.keys(volunteers).forEach(field => {
+                volunteers[field].forEach(v => {
+                    list.innerHTML += `
+                        <div class="volunteer-card">
+                            <h4>${v.name}</h4>
+                            <p>${v.desc}</p>
+                            <p>Availability: ${v.avail.join(', ')}</p>
+                        </div>
+                    `;
+                });
+            });
+        }
+        loadVolunteers();
+
+        // Select field
+        function selectField(field) {
+            document.getElementById('field-select').value = field;
+            document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById('request').classList.remove('hidden');
+        }
+
+        // Submit request
+        document.getElementById('request-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const field = document.getElementById('field-select').value;
+            const desc = document.getElementById('description').value;
+            const available = volunteers[field].filter(v => v.avail.includes(new Date().toLocaleDateString('en', { weekday: 'short' })));
+            if (available.length === 0) {
+                alert('No volunteers available today. Try again tomorrow.');
+                return;
+            }
+            currentMatch = available[Math.floor(Math.random() * available.length)];
+            document.getElementById('match-info').textContent = `Matched with ${currentMatch.name}: ${currentMatch.desc}`;
+            document.getElementById('request-form').classList.add('hidden');
+            document.getElementById('confirmation').classList.remove('hidden');
+        });
+
+        // Confirm or change
+        document.getElementById('confirm-btn').addEventListener('click', () => {
+            alert('Match confirmed! You can now message your volunteer.');
+            document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById('messages').classList.remove('hidden');
+            loadMessages();
+        });
+        document.getElementById('change-btn').addEventListener('click', () => {
+            document.getElementById('confirmation').classList.add('hidden');
+            document.getElementById('request-form').classList.remove('hidden');
+            // Re-submit logic (simplified)
+        });
+
+        // Messaging
+        function loadMessages() {
+            const chat = document.getElementById('chat');
+            chat.innerHTML = '';
+            messages.forEach(msg => {
+                chat.innerHTML += `<div class="message ${msg.sender === 'user' ? 'user-message' : 'volunteer-message'}">${msg.sender === 'user' ? 'You' : currentMatch.name}: ${msg.text}</div>`;
+            });
+        }
+        document.getElementById('message-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const text = document.getElementById('message-input').value;
+            messages.push({ sender: 'user', text });
+            localStorage.setItem('messages', JSON.stringify(messages));
+            loadMessages();
+            document.getElementById('message-input').value = '';
+            // Simulate volunteer response (in production, use WebSockets or polling)
+            setTimeout(() => {
+                messages.push({ sender: 'volunteer', text: 'Thank you for your message. How can I help?' });
+                localStorage.setItem('messages', JSON.stringify(messages));
+                loadMessages();
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
